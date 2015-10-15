@@ -17,14 +17,14 @@
 
 using namespace std;
 
-//TODO implement methods for native/foreign insertion, deletion,
+//TODO implement methods for insertion, deletion,
 // intrachromosomal translocation, interchromosomal translocation,
 // and duplication/tandem duplication.
 int main(int argc, char* argv[]);
 void printUsage();
 
 void printUsage(){
-	cout << "Usage: svsim -i <infile> -r <referenceGenome>" << endl;
+	cout << "Usage: svsim -v <VCFfile> -r <referenceGenome> [-i -h]" << endl;
 }
 
 int main(int argc, char* argv[]){
@@ -39,16 +39,18 @@ int main(int argc, char* argv[]){
 
 	string mut_file;
 	string reference;
+	bool buildIndex = false;
 	int c;
 	int opt_ind = 0;
 
 	while (true){
 		static struct option long_options[] = {
-				{"infile", required_argument, 0, 'i'},
+				{"VCFfile", required_argument, 0, 'v'},
 				{"reference", required_argument, 0, 'r'},
-				{"help", no_argument, 0, 'h'}
+				{"help", no_argument, 0, 'h'},
+				{"buildIndex", no_argument, 0, 'i'}
 		};
-		c = getopt_long(argc, argv, "i:r:h", long_options, &opt_ind);
+		c = getopt_long(argc, argv, "v:r:hi", long_options, &opt_ind);
 
 		if (c == -1){
 			break;
@@ -68,7 +70,7 @@ int main(int argc, char* argv[]){
 			            printf ("\n");
 			            break;
 
-		case 'i':
+		case 'v':
 			mut_file = optarg;
 			break;
 
@@ -79,6 +81,10 @@ int main(int argc, char* argv[]){
 		case 'h':
 			printUsage();
             exit(0);
+			break;
+
+		case 'i':
+			buildIndex = true;
 			break;
 
 		case '?':
@@ -101,10 +107,10 @@ int main(int argc, char* argv[]){
 	cerr << "Using reference " << myFasta << endl;
 
 	//Build fasta index for fasta file provided
-	bool buildIndex = true;
+
 	if (buildIndex) {
 	        FastaIndex::FastaIndex* fai = new FastaIndex::FastaIndex();
-	        cerr << "generating fasta index file for " << myFasta << endl;
+	        cerr << "Generating fasta index file for " << myFasta << endl;
 	        fai->FastaIndex::indexReference("ref.fa");
 	        fai->FastaIndex::writeIndexFile((string) myFasta + fai->FastaIndex::indexFileExtension());
 	    }
@@ -127,7 +133,7 @@ int main(int argc, char* argv[]){
 
 		// TODO Grab relevant subsequence from reference and
 		// perform the necessary operation on it.
-
+	}
 	return 0;
 }
 
