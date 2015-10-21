@@ -1,0 +1,89 @@
+struct Graph{
+	nodes @0 :List(Node);
+	edges @1 :List(Edge);
+	paths @2 :List(Path);
+}
+
+struct Node{
+	sequence @0 :Text;
+	name @1 :Text;
+	id @2 :UInt64;
+	data @3 :Data;
+}
+
+struct Edge{
+	source @0 :UInt64;
+	sink @1 :UInt64;
+	from_source @2 :Bool;
+	to_sink @3 :Bool;
+	data @4 :Data;
+}
+
+struct Info{
+	id @0 :Text;
+	str @1 :Text;
+	int @2 :Int64;
+	data @3 :Data;
+}
+
+struct Edit{
+	from_length @0 :Int32;
+	to_length @1 :Int32;
+	sequence @2 :Text;
+}
+
+struct Mapping{
+	position @0 :Position;
+	edits @1 :List(Edit);
+	is_reverese @2 :Bool;
+}
+
+struct Position{
+	node_id @0 :UInt64;
+	offset @1 :UInt64;
+}
+
+struct Path{
+	name @0 :Text;
+	mapping @1 :List(Mapping);
+}
+
+struct Alignment{
+	sequence @0 :Text;
+	path @1 :Path;
+	name @2 :Text;
+	quality @3 Data;
+	mapping_quality @4 :Int32;
+	score @5 :Int32;
+	query_position @6 :Int32;
+	is_reverse @7 :Bool;
+	sample_name @8 :Text;
+	read_group @9 :Text;
+	prev_fragment @10 :Alignment;
+	next_fragment @11 :Alignment;
+	data @12 :Data;
+	is_secondary @13 :Bool;
+}
+
+struct Fragment{
+	alignments @0 :List(Alignment);
+}
+
+struct KmerMatch{
+	sequence @0 :Text;
+	node_id @1 :UInt64;
+	position @2 :Int32;
+	is_backward @3 :Bool;
+}
+
+struct BasePileup{
+	ref_base @0 :Int32;
+	num_bases @1 : Int32;
+	bases @2 :Text;
+	qualities @3 :Data;
+}
+
+struct NodePileup{
+	node_id @0 :UInt64;
+	base_pileups @1 :List(BasePileup);
+}
