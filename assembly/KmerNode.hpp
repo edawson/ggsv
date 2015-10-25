@@ -10,8 +10,11 @@
 
 #include <string>
 #include <vector>
+#include "../core/GenomeGraph/SequenceNode.hpp"
 
-class KmerNode{
+using namespace GenomeGraph;
+
+class KmerNode: public SequenceNode{
 public:
 	int get_color();
 	int set_color(int color);
@@ -21,6 +24,7 @@ public:
 private:
 	int color;
 	std::string sequence;
+    
 
 
 };

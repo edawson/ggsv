@@ -4,7 +4,7 @@ CXXFLAGS:= "-O3 -g -mtune=native -march=native"
 SIMFLAGS:= "-O2 -g"
 SIMEXE:= ./sim/sim
 SIMSRC:= ./sim/sim.cpp
-SIMINC:= -I./io/fastahack/
+SIMINC:= -Ifastahack
 
 ggsv:
 	$(CC) -o $(EXEC) ggsv.cpp
