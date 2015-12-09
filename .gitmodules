@@ -1,0 +1,6 @@
+[submodule "fastahack"]
+    path = io/fastahack
+    url = https://github/ekg/fastahack.git
+[submodule "vcflib"]
+    path = io/vcflib
+    url = https://github/ekg/vcflib.git
