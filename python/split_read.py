@@ -13,4 +13,6 @@ def get_position(read):
     raise Error()
 
 if __name__ == "__main__":
-    return
+    gam = sys.argv[1]
+    aligned = parse_gam(gam)
+    ## iterate over reads - look for those that align to multiple regions
