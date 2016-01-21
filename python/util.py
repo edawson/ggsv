@@ -1,4 +1,4 @@
-
+import vg_pb2
 class SV:
     def __init__(self):
         return
