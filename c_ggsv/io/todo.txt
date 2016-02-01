@@ -1,4 +1,0 @@
-1. BAM/CRAM/SAM input/output
-2. VCF
-3. GFA/GAM
-4. FASTA/FASTQ

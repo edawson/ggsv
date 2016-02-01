@@ -1,6 +1,5 @@
 import re
 import multiprocessing
-import protobuf
 
 
 def parse_gam(gamfile):
