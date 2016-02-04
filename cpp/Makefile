@@ -11,10 +11,16 @@ BIN_DIR=bin
 LIB_DIR=lib
 
 
-all:
+all: $(CPP_DIR)/vg.pb.h .pre-build
 	echo "Not implemented"
 
-$(CPP_DIR)/vg.pb.h: vg.proto .pre-build
+$(INC_DIR)/stream.hpp: .pre-build
+	cp $(SRC_DIR)/stream.hpp $(INC_DIR)/stream.hpp
+
+$(OBJ_DIR)/vg.pb.o: $(CPP_DIR)/vg.pb.h .pre-build
+	$(CXX) -O3 -msse4.1 -fopenmp -std=c++11 -c -o $@ $< $(LD_INCLUDE_FLAGS) $(LD_LIB_FLAGS)
+
+$(CPP_DIR)/vg.pb.h: .pre-build
 	protoc --cpp_out=$(CPP_DIR) vg.proto
 
 .pre-build:
@@ -24,4 +30,14 @@ $(CPP_DIR)/vg.pb.h: vg.proto .pre-build
 	if [ ! -d $(INC_DIR) ]; then mkdir -p $(INC_DIR); fi
 	if [ ! -d $(CPP_DIR) ]; then mkdir -p $(CPP_DIR); fi
 	touch .pre-build
+
+.PHONY: clean
+
+clean:
+	$(RM) -r $(BIN_DIR)
+	$(RM) -r $(LIB_DIR)
+	$(RM) -r $(INC_DIR)
+	$(RM) -r $(OBJ_DIR)
+	$(RM) -r $(CPP_DIR)
+	rm .pre-build
 

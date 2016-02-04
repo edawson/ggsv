@@ -83,8 +83,8 @@ def build_counts(alignment):
         for e in m["edit"]:
             ed = mE(m["edit"])
             ## Only store edits that are not exact matches
-            if iM(ed):
-                continue
+#            if iM(ed):
+#                continue
             e_hash = "_".join([str(ed[0]), str(ed[1]), str(ed[2])])
             if pos_hash in pos_to_edit_to_count:
                 if e_hash in pos_to_edit_to_count[pos_hash]:
