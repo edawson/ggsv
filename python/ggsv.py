@@ -12,9 +12,10 @@ from util import parse_fastq_file
 def parse_args():
     parser = argparse.ArgumentParser();
     #parser.add_argument("-i", dest="infile", required=True, type=str)
-    parser.add_argument("-t", dest="cores", required=False, type=int, default=1)
-    parser.add_argument("-s", dest="svtype", choices=["SR", "RP", "SC", ""], default="", required=False)
-    parser.add_argument("-g", dest="gam", required=True, type=str)
+    #parser.add_argument("-a", "--analysis", dest="analysis", required)
+    parser.add_argument("-t", "--threads", dest="cores", required=False, type=int, default=1)
+    parser.add_argument("-s", "--svtype", dest="svtype", choices=["SR", "RP", "SC", ""], default="", required=False)
+    parser.add_argument("-g", "--gam", dest="gam", required=True, type=str)
     parser.add_argument("-j", "--json", dest="json", required=False, type=bool, default=False)
     parser.add_argument("-i", "--stream", dest="stream", required=False, type=bool, default=False)
     parser.add_argument("-c", "--counts", dest="counts", required=False, type=str, default=None)
@@ -22,7 +23,7 @@ def parse_args():
     return parser.parse_args()
 
 
-## deserializes protobuf
+## TODO deserializes protobuf
 def for_each_input(s):
     return
 
@@ -37,7 +38,32 @@ def parse_input(infile, isJson, isStream):
     else:
         raise NotImplementedError
 
+## Takes in the alignment and parses it for quals at corresponding
+## bases. This is harder than it sounds.
+## It then multiples the quality score at a site-edit with the depth
+## from the population at that site-edit and returns a tuple
+## of length site-edits
+def build_qual_depth_vector(alignment, pos_edit_to_count, min_score=0.0):
+    mP = make_pos
+    mE = make_edit
+    vec = None
+    ## We'll need the quals
+    quals = alignment["quality"]
+    ## and the path
+    path = alignment["path"]
+    mapping = path["mapping"]
+    ## Next up: walk the path from the beginning
+    ## keep track of the distance in the read,
+    ## which should stay below 8kb or so.
+    ## at each edit we find, check if it's in the
+    ## pos_to_edit_to_count. If it is, multiply
+    ## the corresponding quality at that position
+    ## by the depth at the position-edit.
+    ## If no edit is present or no quality is given,
+    ## place a minimum score in the cell.
+    for m in mapping:
 
+    return vec
 
 def make_edit(edit):
     for p in edit:
@@ -156,10 +182,16 @@ if __name__ == "__main__":
             ## TODO we store counts as a DICT, is this going to be efficient for large
             ## sequences??
             pos_to_edit_to_count = parse_counts_file(args.counts)
+            ## map edits in the alignments to
+
+
+
+
+
             ## We use a generator for this...
             ## TODO may be more efficient to load into memory if we can.
             ## TODO WHERE ARE THE QUALS IN GAM???????
-            reads = parse_fastq_file(args.reads)
+            #reads = parse_fastq_file(args.reads)
 
 
 

@@ -13,6 +13,9 @@ class Evidence:
 def parse_gam(gam):
     return
 
+def parse_gam_json(gamfile):
+    return
+
 def write_vcf_header():
     return
 
@@ -50,4 +53,3 @@ def parse_fastq_file(fastq_file):
                 iden = ""; seq = ""; anno = ""; scr = ""
                 yield rec
     #return records
-            
