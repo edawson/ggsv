@@ -38,6 +38,15 @@ def parse_input(infile, isJson, isStream):
     else:
         raise NotImplementedError
 
+def make_array(read, pos_to_edit_to_count):
+    ## walk the read for pos edits
+    quals = read["quality"]
+    path = read["path"]
+
+            ## now in pos_edit space
+
+
+
 ## Takes in the alignment and parses it for quals at corresponding
 ## bases. This is harder than it sounds.
 ## It then multiples the quality score at a site-edit with the depth
@@ -62,6 +71,13 @@ def build_qual_depth_vector(alignment, pos_edit_to_count, min_score=0.0):
     ## If no edit is present or no quality is given,
     ## place a minimum score in the cell.
     for m in mapping:
+        pos = mP(m["position"])
+        ##iterate over edits
+        pos_hash = "_".join([str(pos[0]), str(pos[1])])
+        if pos_hash in pos_to_edit_to_count:
+            pass
+        else:
+            continue
 
     return vec
 
