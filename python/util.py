@@ -11,7 +11,8 @@ class Evidence:
         return
 
 def generate_gam_alignment(gam):
-	with open(gam, "r") as gfi:
+    with open(gam, "r") as gfi:
+        pass
     return
 
 def parse_gam_json(gamfile):
@@ -26,10 +27,10 @@ def parse_gam_json(gamfile):
 			yield Alignment(seq, quals, path)
 
 def write_vcf_header():
-	ret = ""
-	ret += "##Version=VCF4.1\n"
-	ret += "##Source=ggsv\n"
-	ret+="CHROM\tPOS\tID\tALT\tREF\tQual\n"
+    ret = ""
+    ret += "##Version=VCF4.1\n"
+    ret += "##Source=ggsv\n"
+    ret+="CHROM\tPOS\tID\tALT\tREF\tQual\n"
     return ret
 
 def write_vcf(variants):

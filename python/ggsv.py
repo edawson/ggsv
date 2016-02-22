@@ -98,6 +98,17 @@ def make_edit(edit):
             to_length = 0
         return from_length, to_length, seq
 
+def make_pos(pos):
+    try:
+        offset = int(pos["offset"])
+    except KeyError:
+        offset = 0
+    try:
+        n_id = int(pos["node_id"])
+    except KeyError:
+        n_id = 0
+    return n_id, offset
+
 ## Takes an edit and filters it out if
 ## from_len == to_len and seq is empty
 def isMatch(ed):
@@ -138,16 +149,6 @@ def build_counts(alignment):
                 pos_to_edit_to_count[pos_hash][e_hash] = 1
     return pos_to_edit_to_count
 
-def make_pos(pos):
-    try:
-        offset = int(pos["offset"])
-    except KeyError:
-        offset = 0
-    try:
-        n_id = int(pos["node_id"])
-    except KeyError:
-        n_id = 0
-    return n_id, offset
 
 
 def process_json(alignment):
