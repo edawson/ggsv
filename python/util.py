@@ -10,14 +10,27 @@ class Evidence:
     def __init__(self):
         return
 
-def parse_gam(gam):
+def generate_gam_alignment(gam):
+	with open(gam, "r") as gfi:
     return
 
 def parse_gam_json(gamfile):
-    return
+	with open(gamfile, "r") as gfi:
+		for line in gfi:
+			j_rec = json.loads(line)
+			seq = jrec["sequence"]
+			quals = j_rec["quality"]
+			path = j_rec["path"]
+		    #mapping = path["mapping"]
+			Alignment = namedtuple("Alignment", "sequence quality path")
+			yield Alignment(seq, quals, path)
 
 def write_vcf_header():
-    return
+	ret = ""
+	ret += "##Version=VCF4.1\n"
+	ret += "##Source=ggsv\n"
+	ret+="CHROM\tPOS\tID\tALT\tREF\tQual\n"
+    return ret
 
 def write_vcf(variants):
     return
