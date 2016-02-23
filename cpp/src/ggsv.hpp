@@ -2,5 +2,9 @@
 #define GGSV_HPP
 #include "stream.hpp"
 
+namespace ggsv{
+  
+
+}
 
 #endif

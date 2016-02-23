@@ -20,6 +20,10 @@ int main_soft_clip(int argc, char** argv){
   return 1;
 }
 
+int main_read_pair(int argc, char** argv){
+    return 1;
+}
+
 
 
 int main(int argc, char** argv){
@@ -73,8 +77,7 @@ int main(int argc, char** argv){
     ifstream in;
     in.open(infile);
     if (in.good()){
-      for_each(in, lambda);
-
+      for_each_parallel(in, lambda);
     }
 
       return 1;
