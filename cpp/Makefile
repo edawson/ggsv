@@ -14,6 +14,12 @@ SRC_DIR=src
 $(EXE): $(OBJ_DIR)/main.o $(INC_DIR)/stream.hpp $(OBJ_DIR)/vg.pb.o
 	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJ_DIR)/vg.pb.o $(LD_INC_FLAGS) $(LD_LIB_FLAGS)
 
+cg: $(OBJ_DIR)/cg.o $(INC_DIR)/stream.hpp $(OBJ_DIR)/vg.pb.o
+	 $(CXX) $(CXXFLAGS) -o $@ $< $(OBJ_DIR)/vg.pb.o $(LD_INC_FLAGS) $(LD_LIB_FLAGS)
+
+$(OBJ_DIR)/cg.o: $(SRC_DIR)/cg.cpp $(INC_DIR)/stream.hpp $(OBJ_DIR)/vg.pb.o
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LD_INC_FLAGS) $(LD_LIB_FLAGS)
+
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp $(INC_DIR)/stream.hpp $(OBJ_DIR)/vg.pb.o
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LD_INC_FLAGS) $(LD_LIB_FLAGS)
 
