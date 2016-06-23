@@ -4,3 +4,6 @@
 [submodule "vcflib"]
     path = io/vcflib
     url = https://github/ekg/vcflib.git
+[submodule "vg"]
+	path = vg
+	url = https://github.com/edawson/vg.git
