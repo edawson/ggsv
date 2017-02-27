@@ -7,7 +7,9 @@ def parse_args():
     parser.add_argument("-s", "--seed", type=int, dest="seed", required=False, default=42)
     parser.add_argument("-p", "--start", type=int, dest="start", required=False, default=0)
     parser.add_argument("-l", "--length", type=int, dest="length", required=False, default=0)
-    parser.add_argument("-g", "--descrip", type=str, dest="descrip", required=False)
+    parser.add_argument("-d", "--descrip", type=str, dest="descrip", required=False)
+    parser.add_argument("-g", "--genome-length", type=int, dest="genomelen", required=False, default=10000)
+
 
 
     return parser.parse_args()
@@ -26,8 +28,10 @@ def make_deletion(seq, start, size):
         raise Exception("Start of variant must fall within sequence length.")
     return "".join([seq[:start], seq[start+size:]])
 
-def make_tandem_duplication(seq, start, size):
-    return
+def make_tandem_duplication(seq, rpt,  start, size):
+    tand = seq[start:size]
+    tand = "".join( [ tand for i in xrange(0,rpt)])
+    return "".join( [seq[:start], tand, seq[start + size:] ] )
 
 def make_balanced_translocation(src, dest, start_src, start_dest, size, reciprocal=False):
     return
@@ -62,19 +66,21 @@ if __name__ == "__main__":
 
     fafi = None
     out_seq = None
+
     if args.fasta is not None:
         fafi = parse_fa(args.fasta)
     else:
-        fafi = ("Random", random_seq(10000))
+        fafi = ("Random", random_seq(args.genomelen))
 
-    with open(fafi[0] + "original.fa", "w") as unmodded:
-        unmodded.write(fafi[0].strip(">") + "\n")
+    with open(fafi[0].strip(">") + ".original.fa", "w") as unmodded:
+        unmodded.write( ">" + fafi[0] + "\n")
         unmodded.write(fafi[1] + "\n")
 
 
     ## variant description file
     ## it's pretty much a bed file
     ## varType contig startPos size optInsertionSequence
+    offset = 0
     if args.descrip is not None:
         outvar = fafi[1]
         with open(args.descrip, "r") as ifi:
@@ -91,7 +97,7 @@ if __name__ == "__main__":
                     pass
                 elif tokens[0] == "translocation":
                     pass
-        print fafi[0], "\n", outvar
+        print ">", fafi[0], "\n", outvar
         for i in insertion_tracker:
             print ">", i, "\n", insertion_tracker[i]
 
