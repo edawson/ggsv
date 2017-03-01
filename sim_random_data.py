@@ -5,8 +5,8 @@ def parse_args():
     parser.add_argument("-f", "--fasta", dest="fasta", required=False)
     parser.add_argument("-t", "--type", type=str, dest="type", default=[""], required=False, nargs='+', help="One or several of del, ins, tand, trans to insert into sequence")
     parser.add_argument("-s", "--seed", type=int, dest="seed", required=False, default=42)
-    parser.add_argument("-p", "--start", type=int, dest="start", required=False, default=0)
-    parser.add_argument("-l", "--length", type=int, dest="length", required=False, default=0)
+    parser.add_argument("-p", "--start", type=int, dest="start", required=False)
+    parser.add_argument("-l", "--length", type=int, dest="length", required=False)
     parser.add_argument("-d", "--descrip", type=str, dest="descrip", required=False)
     parser.add_argument("-g", "--genome-length", type=int, dest="genomelen", required=False, default=10000)
 
@@ -16,16 +16,16 @@ def parse_args():
 
 def random_seq(size):
     alph = "ACTG"
-    return "".join(random.choice(alph) for i in xrange(size))
+    return "".join(alph[random.randint(0,3)] for i in xrange(size))
 
-def make_insertion(seq, start, size):
-    ins = random_seq(size)
-    return "".join([seq[0:start], ins, seq[start+size:]]), ins
+def make_insertion(seq, start, size, ins=""):
+    ins = random_seq(size) if ins == "" else ins
+    return "".join([seq[:start], ins, seq[start:]]), ins
 
 
 def make_deletion(seq, start, size):
-    if start > len(seq):
-        raise Exception("Start of variant must fall within sequence length.")
+    if start > len(seq) or (start + size) > len(seq):
+        raise Exception("Variant must fall within sequence length.")
     return "".join([seq[:start], seq[start+size:]])
 
 def make_tandem_duplication(seq, rpt,  start, size):
@@ -89,20 +89,25 @@ if __name__ == "__main__":
                 if tokens[0] == "deletion":
                     outvar = make_deletion(outvar, int(tokens[2]), int(tokens[3]))
                 elif tokens[0] == "insertion":
-                    ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]))
+                    random.seed()
+                    if len(tokens) <= 4:
+                        ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]))
+                    else:
+                        ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]), tokens[4])
+
                     outvar = ins[0]
                     insertion_tracker[ "_".join( [str(tokens[2]), str(tokens[3]) ])] = ins[1]
-                    pass
                 elif tokens[0] == "tandem_duplication":
                     pass
                 elif tokens[0] == "translocation":
                     pass
-        print ">", fafi[0], "\n", outvar
+        print (">"+  fafi[0] + "\n"), outvar
         for i in insertion_tracker:
-            print ">", i, "\n", insertion_tracker[i]
+            print (">" + i + "\n"), insertion_tracker[i]
 
     if "ins" in args.type:
-        out_seq = make_insertion(fafi[1], start, size)
+        print fafi[0]
+        out_seq = make_insertion(fafi[1], start, size)[0]
         print out_seq
 
     elif "del" in args.type:

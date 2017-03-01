@@ -6,9 +6,9 @@ if __name__ == "__main__":
     header = "##fileformat=VCFv4.0\n"
     header += "##source=ggsv\n"
     #header += "##reference="
-    header += "INFO=<ID=SVTYPE,Number=1,Type=String,Description=\"SV Type\">\n"
-    header += "INFO=<ID=SVLEN,Number=1,Type=String,Description=\"SV length\">\n"
-    header += "CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"
+    header += "##INFO=<ID=SVTYPE,Number=1,Type=String,Description=\"SV Type\">\n"
+    header += "##INFO=<ID=SVLEN,Number=1,Type=String,Description=\"SV length\">\n"
+    header += "##CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"
 
     print header
     
@@ -23,7 +23,7 @@ if __name__ == "__main__":
                 svlen_str = "SVLEN=" + tokens[3]
                 svtype_str = "SVTYPE=" + "DEL"
                 info_str = ";".join( [svlen_str, svtype_str] )
-                varlist = [tokens[1], pos, ".", "N", "<DEL>", "99", "PASS", info_str]
+                varlist = [tokens[1], pos, ".", "A", "<DEL>", "99", "PASS", info_str]
                 print "\t".join( varlist )
             elif tokens[0] == "insertion":
                 pos = str( int(tokens[2]) + offset )
@@ -32,7 +32,7 @@ if __name__ == "__main__":
                 svtype_str = "SVTYPE=" + "INS"
                 info_str = ";".join( [svlen_str, svtype_str] )
                 alt_str = "<" + "_".join([ tokens[2], tokens[3] ]) + ">"
-                varlist = [tokens[1], pos, ".", alt_str ,"N" , "99", "PASS", info_str]
+                varlist = [tokens[1], pos, ".", "A", alt_str , "99", "PASS", info_str]
                 print "\t".join( varlist )
             elif tokens[0] == "tandem_duplication":
                 pass
