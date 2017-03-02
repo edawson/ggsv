@@ -1,5 +1,7 @@
 import argparse
 import random
+import sys
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--fasta", dest="fasta", required=False)
@@ -18,15 +20,19 @@ def random_seq(size):
     alph = "ACTG"
     return "".join(alph[random.randint(0,3)] for i in xrange(size))
 
-def make_insertion(seq, start, size, ins=""):
-    ins = random_seq(size) if ins == "" else ins
-    return "".join([seq[:start], ins, seq[start:]]), ins
+def make_insertion(seq, start, size, offset=0, ins=""):
+    ins = random_seq(size)
+    start = start + offset[0]
+    offset[0] += size
+    return "".join([seq[:start], ins, seq[start:]]), ins, offset
 
 
-def make_deletion(seq, start, size):
+def make_deletion(seq, start, size, offset=0):
     if start > len(seq) or (start + size) > len(seq):
         raise Exception("Variant must fall within sequence length.")
-    return "".join([seq[:start], seq[start+size:]])
+    start = start + offset[0]
+    offset[0] -= size
+    return "".join([seq[:start], seq[start+size:]]), offset
 
 def make_tandem_duplication(seq, rpt,  start, size):
     tand = seq[start:size]
@@ -80,23 +86,30 @@ if __name__ == "__main__":
     ## variant description file
     ## it's pretty much a bed file
     ## varType contig startPos size optInsertionSequence
-    offset = 0
+    offset = [0]
     if args.descrip is not None:
         outvar = fafi[1]
         with open(args.descrip, "r") as ifi:
             for line in ifi:
+                if line.startswith("#"):
+                    continue
+                sys.stderr.write(str(offset[0]) + "\n")
+                sys.stderr.write("Sequence length: " + str(len(outvar)) + "\n")
                 tokens = line.strip().split()
                 if tokens[0] == "deletion":
-                    outvar = make_deletion(outvar, int(tokens[2]), int(tokens[3]))
+                    d = make_deletion(outvar, int(tokens[2]), int(tokens[3]), offset)
+                    outvar = d[0]
+                    offset[0] = d[1][0]
                 elif tokens[0] == "insertion":
-                    random.seed()
-                    if len(tokens) <= 4:
-                        ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]))
-                    else:
-                        ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]), tokens[4])
+                    #random.seed()
+                    #if len(tokens) < 5:
+                    ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]), offset)
+                    #else:
+                    #ins = make_insertion(outvar, int(tokens[2]), int(tokens[3]), tokens[4])
 
                     outvar = ins[0]
                     insertion_tracker[ "_".join( [str(tokens[2]), str(tokens[3]) ])] = ins[1]
+                    offset[0] = ins[2][0]
                 elif tokens[0] == "tandem_duplication":
                     pass
                 elif tokens[0] == "translocation":
