@@ -26,6 +26,10 @@ def make_insertion(seq, start, size, offset=0, ins=""):
     offset[0] += size
     return "".join([seq[:start], ins, seq[start:]]), ins, offset
 
+def make_inversion(seq, start, size, offset=0):
+    start = start + offset
+    return "".join( [ seq[:start], seq[ start + size : start : -1], seq[start+size:]])
+
 
 def make_deletion(seq, start, size, offset=0):
     if start > len(seq) or (start + size) > len(seq):
