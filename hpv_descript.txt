@@ -1,0 +1,6 @@
+deletion HPV16 100 10
+insertion HPV16 150 10
+deletion HPV16 1000 300
+insertion HPV16 1500 300
+deletion HPV16 4000 1000
+insertion HPV16 6000 1000
