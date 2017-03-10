@@ -1,0 +1,7 @@
+##fileformat=VCFv4.0
+##source=ggsv
+##INFO=<ID=SVTYPE,Number=1,Type=String,Description="SV Type">
+##INFO=<ID=SVLEN,Number=1,Type=String,Description="SV length">
+##CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+tiny	10	.	A	<DEL>	99	PASS	SVLEN=10;SVTYPE=DEL
+tiny	100	.	A	<100_300>	99	PASS	SVLEN=300;SVTYPE=INS
