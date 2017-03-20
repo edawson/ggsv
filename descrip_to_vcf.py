@@ -8,6 +8,7 @@ if __name__ == "__main__":
     #header += "##reference="
     header += "##INFO=<ID=SVTYPE,Number=1,Type=String,Description=\"SV Type\">\n"
     header += "##INFO=<ID=SVLEN,Number=1,Type=String,Description=\"SV length\">\n"
+    header += "##INFO=<ID=END,Number=1,Type=String,Description=\"SV End\">\n"
     header += "##CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"
 
     print header
@@ -21,8 +22,9 @@ if __name__ == "__main__":
                 pos = str( int(tokens[2]) + offset )
                 #offset -= int(tokens[3])
                 svlen_str = "SVLEN=" + tokens[3]
+                end_str = "END=" + str( int(tokens[2]) + offset + int(tokens[3]))
                 svtype_str = "SVTYPE=" + "DEL"
-                info_str = ";".join( [svlen_str, svtype_str] )
+                info_str = ";".join( [svlen_str, svtype_str, end_str] )
                 varlist = [tokens[1], pos, ".", "A", "<DEL>", "99", "PASS", info_str]
                 print "\t".join( varlist )
             elif tokens[0] == "insertion":
@@ -30,7 +32,8 @@ if __name__ == "__main__":
                 #offset += int(tokens[3])
                 svlen_str = "SVLEN=" + tokens[3]
                 svtype_str = "SVTYPE=" + "INS"
-                info_str = ";".join( [svlen_str, svtype_str] )
+                end_str = "END=" + str( int(tokens[2]) + offset + int(tokens[3]))
+                info_str = ";".join( [svlen_str, svtype_str, end_str] )
                 alt_str = "<" + "_".join([ tokens[2], tokens[3] ]) + ">"
                 varlist = [tokens[1], pos, ".", "A", alt_str , "99", "PASS", info_str]
                 print "\t".join( varlist )
@@ -39,5 +42,12 @@ if __name__ == "__main__":
             elif tokens[0] == "translocation":
                 pass
             elif tokens[0] == "inversion":
-                pass
-
+                pos = str( int(tokens[2]) + offset )
+                #offset += int(tokens[3])
+                svlen_str = "SVLEN=" + tokens[3]
+                svtype_str = "SVTYPE=" + "INV"
+                end_str = "END=" + str( int(tokens[2]) + offset + int(tokens[3]))
+                info_str = ";".join( [svlen_str, svtype_str, end_str] )
+                alt_str = "<" + "INV" + ">"
+                varlist = [tokens[1], pos, ".", "A", alt_str , "99", "PASS", info_str]
+                print "\t".join( varlist )
