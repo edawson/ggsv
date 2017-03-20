@@ -12,28 +12,29 @@ python descrip_to_vcf.py mega_descrip.txt > mega.vcf && \
     time ../vg/bin/vg map -t 4 -f alt1.fq -f alt2.fq -x mega.xg -g mega.gcsa > alt.mega.gam && \
     time ../vg/bin/vg map -t 4 -f ref1.fq -f ref2.fq -x mega.xg -g mega.gcsa > ref.mega.gam && \
     cat ref.mega.gam alt.mega.gam > het.gam
-time ../vg/bin/vg genotype -F mega.fa -I mod.mega.fa -V mega.vcf -G alt.mega.gam mega.vg x > recall.alt.mega.vcf && \
-    cat recall.alt.mega.vcf
-exit
+time ../vg/bin/vg genotype -F mega.orig.fa -I mod.mega.fa -V mega.vcf -G alt.mega.gam mega.vg x > recall.alt.mega.vcf
+    #cat recall.alt.mega.vcf
+
 
 ## Run DELLY
-time bwa index mega.orig.fa && \
-time ./bwa/bwa mem -R '@RG\tID:alt\tSM:alt' mega.orig.fa alt1.fq alt2.fq | samtools view -bSh - > alt.bam && \
+time ~/sandbox/ggsv/bwa/bwa index mega.orig.fa && \
+    time ~/sandbox/ggsv/bwa/bwa mem -t 4 -R '@RG\tID:alt\tSM:alt' mega.orig.fa alt1.fq alt2.fq | samtools view -bSh - > alt.bam && \
     sambamba sort alt.bam && \
     echo "Delly deletions: " && \
-    time ./delly/src/delly call -t DEL -g mega.orig.fa alt.sorted.bam -o alt.del.sv.delly.bcf && \
+    time ~/sandbox/ggsv/delly/src/delly call -t DEL -g mega.orig.fa alt.sorted.bam -o alt.del.sv.delly.bcf && \
     echo "Delly insertions: " && \
-    time ./delly/src/delly call -t INS -g mega.orig.fa alt.sorted.bam -o alt.ins.sv.delly.bcf && \
+    time ~/sandbox/ggsv/delly/src/delly call -t INS -g mega.orig.fa alt.sorted.bam -o alt.ins.sv.delly.bcf && \
     echo "Delly recall" && \
-    time ./delly/src/delly call -v recall.alt.vcf -g mega.orig.fa alt.sorted.bam -o alt.regenotype.delly.bcf
+    time ~/sandbox/ggsv/delly/src/delly call -v recall.alt.mega.vcf -g mega.orig.fa alt.sorted.bam -o alt.regenotype.delly.bcf
 #bcftools view alt.del.sv.delly.bcf && \
     #bcftools view alt.ins.sv.delly.bcf && \
     #bcftools view alt.regenotype.delly.bcf
 
 ## Run LUMPY
 ./extract.sh alt.bam && \
-    time sambamba view -h --num-filter /1294 alt.sorted.bam | samtools sort -@ 2 -o alt.discords.bam - && \
+    time sambamba view -h --num-filter /1294 alt.sorted.bam | samtools sort -@ 2 -o alt.discords.sorted.bam /dev/stdin && \
     echo "Lumpy: " && \
-    time ./lumpy-sv/bin/lumpyexpress -B alt.bam -D alt.discords.bam -S alt.splitters.bam -o alt.lumpy.vcf && \
+    time ~/sandbox/ggsv/lumpy-sv/bin/lumpyexpress -B alt.bam -D alt.discords.sorted.bam -S alt.splitters.sorted.bam -o alt.lumpy.vcf && \
     echo "SVTYPER: " && \
-    time ./svtyper/svtyper -i alt.lumpy.vcf -B alt.bam -o alt.svtyper.vcf
+    time ~/sandbox/ggsv/svtyper/svtyper -i alt.lumpy.vcf -B alt.sorted.bam -o alt.svtyper.vcf
+
