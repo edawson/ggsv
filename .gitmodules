@@ -1,0 +1,6 @@
+[submodule "lumpy-sv"]
+	path = lumpy-sv
+	url = https://github.com/arq5x/lumpy-sv
+[submodule "delly"]
+	path = delly
+	url = https://github.com/dellytools/delly
