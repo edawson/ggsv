@@ -97,8 +97,8 @@ if __name__ == "__main__":
             for line in ifi:
                 if line.startswith("#"):
                     continue
-                sys.stderr.write(str(offset[0]) + "\n")
-                sys.stderr.write("Sequence length: " + str(len(outvar)) + "\n")
+                #sys.stderr.write(str(offset[0]) + "\n")
+                #sys.stderr.write("Sequence length: " + str(len(outvar)) + "\n")
                 tokens = line.strip().split()
                 if tokens[0] == "deletion":
                     d = make_deletion(outvar, int(tokens[2]), int(tokens[3]), offset)
@@ -138,3 +138,5 @@ if __name__ == "__main__":
     elif "trans" in args.type:
         out_seq = make_translocation(fafi[1], fafi[1], start, start+size, size)
         print fafi[0], "\n", out_seq
+    
+    sys.exit(0)
