@@ -12,7 +12,7 @@ python descrip_to_vcf.py mega_descrip.txt > mega.vcf && \
     time ../vg/bin/vg map -t 4 -f alt1.fq -f alt2.fq -x mega.xg -g mega.gcsa > alt.mega.gam && \
     time ../vg/bin/vg map -t 4 -f ref1.fq -f ref2.fq -x mega.xg -g mega.gcsa > ref.mega.gam && \
     cat ref.mega.gam alt.mega.gam > het.gam
-time ../vg/bin/vg genotype -F mega.orig.fa -I mod.mega.fa -V mega.vcf -G alt.mega.gam mega.vg x > recall.alt.mega.vcf
+time ../vg/bin/vg genotype -F mega.orig.fa -I mod.mega.fa -V mega.vcf -G alt.mega.gam mega.vg x > recall.alt.mega.vcf && \
 
 ## Run DELLY
 time ./bwa/bwa index mega.orig.fa && \
@@ -25,7 +25,7 @@ time ./bwa/bwa index mega.orig.fa && \
      echo "Delly inversion: " && \
     time ./delly/src/delly call -t INV -g mega.orig.fa alt.sorted.bam -o alt.inv.sv.delly.bcf && \
     echo "Delly recall" && \
-    time ./delly/src/delly call -v recall.alt.mega.vcf -g mega.orig.fa alt.sorted.bam -o alt.regenotype.delly.bcf
+    time ./delly/src/delly call -v recall.alt.mega.vcf -g mega.orig.fa alt.sorted.bam -o alt.regenotype.delly.bcf && \
 
 ## Run LUMPY
 ./extract.sh alt.bam && \
