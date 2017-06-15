@@ -33,11 +33,14 @@ def rev_comp(seq):
             "T" : "A",
             "G" : "C"
             }
-    return "".join([r_dict[i] for i in seq[::-1]  ])
+    return "".join([r_dict[i] for i in seq])[::-1]
 
-def make_inversion(seq, start, size, offset=0):
-    start = start + offset
-    return "".join( [ seq[:start], rev_comp(seq[ start + size : start :]), seq[start+size:]])
+def make_inversion(seq, start, size, offset=[0]):
+    start = start + offset[0]
+    #return "".join( [ seq[:start], rev_comp(seq[start:size:]), seq[start+size:]])
+    #print rev_comp(seq[start:start+size:])
+    #print seq, start, size, seq[start:start+size]
+    return ["".join( [ seq[:start], rev_comp(seq[start:start+size:]), seq[start+size:]])]
 
 
 def make_deletion(seq, start, size, offset=0):
@@ -113,6 +116,9 @@ if __name__ == "__main__":
                     d = make_deletion(outvar, int(tokens[2]), int(tokens[3]), offset)
                     outvar = d[0]
                     offset[0] = d[1][0]
+                elif tokens[0] == "inversion":
+                    d = make_inversion(outvar, int(tokens[2]), int(tokens[3]), offset)
+                    outvar = d[0]
                 elif tokens[0] == "insertion":
                     #random.seed()
                     #if len(tokens) < 5:
