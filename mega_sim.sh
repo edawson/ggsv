@@ -14,9 +14,14 @@ python descrip_to_vcf.py mega_descrip.txt > mega.vcf && \
     cat ref.mega.gam alt.mega.gam > het.gam
 time ../vg/bin/vg genotype -F mega.orig.fa -I mod.mega.fa -V mega.vcf -G alt.mega.gam mega.vg x > recall.alt.mega.vcf && \
 
+## vg call
+../vg/bin/vg pileup mega.vg alt.mega.gam > alt.vgpu && \
+    time ../vg/bin/vg call mega.vg alt.vgpu > alt.call.vcf && \
+
 ## Run DELLY
 time ./bwa/bwa index mega.orig.fa && \
     time ./bwa/bwa mem -R '@RG\tID:alt\tSM:alt' mega.orig.fa alt1.fq alt2.fq | samtools view -bSh - > alt.bam && \
+    time ./bwa/bwa mem -R '@RG\tID:ref\tSM:ref' mega.orig.fa ref1.fq ref2.fq | samtools view -bSh - > ref.bam && \
     sambamba sort alt.bam && \
     echo "Delly deletions: " && \
     time ./delly/src/delly call -t DEL -g mega.orig.fa alt.sorted.bam -o alt.del.sv.delly.bcf && \
