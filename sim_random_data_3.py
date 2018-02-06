@@ -19,7 +19,7 @@ def parse_args():
 
 def random_seq(size):
     alph = "ACTG"
-    return "".join(alph[random.randint(0,3)] for i in xrange(size))
+    return "".join(alph[random.randint(0,3)] for i in range(size))
 
 def make_insertion(seq, start, size, offset=0, ins=""):
     ins = random_seq(size)
@@ -53,7 +53,7 @@ def make_deletion(seq, start, size, offset=0):
 
 def make_tandem_duplication(seq, rpt,  start, size):
     tand = seq[start:size]
-    tand = "".join( [ tand for i in xrange(0,rpt)])
+    tand = "".join( [ tand for i in range(0,rpt)])
     return "".join( [seq[:start], tand, seq[start + size:] ] )
 
 def make_balanced_translocation(src, dest, start_src, start_dest, size, reciprocal=False):
